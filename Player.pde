@@ -112,10 +112,21 @@ class Player {
     //println("v.x =" +v.x + "v.y="+v.y);
   }
 
+  String dir_to_closest_md() {
+    MetaData closest_md = this.gps();
+    String dir="";
+    if (closest_md.y>this.p.y) dir+="S";
+    else dir+="N";
+    if (closest_md.x>this.p.x) dir+="-E";
+    else dir+="-W";
+    return dir;
+  }
+
   float [] space={20, 20};
   float [] space2={5, 5};
 
   void draw2() {
+
     // ellipse autour de l'ellipse principale
     /* noFill();
      stroke(0,100);
@@ -168,10 +179,74 @@ class Player {
     }
   }
 
-  
-    
-    
+  /*Provide direction to the closest metadata */
+  MetaData gps() {
+    /*
+     We assume that calculate the distance between meta data
+     and player is by far the most expensive operation.
+     So we have to find a may to minimalize distance calculation
+     The idea is to draw a square around player
+     If meta data is inside the square it will return its
+     distance to player position and hence we'll find
+     the closest meta data.
+     Else if no metadata is inside the square, his length
+     will increase gradually till a metadata is found inside
+     */
+
+    int radius = 0;//radius value is given in pixel
+    /*Yeah, before you ask, I know the radius of a square
+     is uncommon but this is my method !
+     I DID NOT COME HERE TO SUFFER OKAYYYYYYYYYYY
+     */
+
+
+    MetaData closest_metaData = null;
+    float minimal_distance = width_world;
+
+    while (closest_metaData ==null) {
+      radius += 50;
+      float min_x = this.p.x-radius;//here are the coordinates interval
+      float min_y = this.p.y-radius;//where metadata are if they are
+      float max_x = this.p.x+radius;//inside the square
+      float max_y = this.p.y+radius;
+      for (MetaData md : tabMeta) {
+        if (md.inside(min_x, min_y, max_x, max_y)) {
+          //if md is in the square, we compute its distance to the player
+          float distance = this.euclidean_distance(md);
+          if (distance < minimal_distance) {
+            closest_metaData = md;
+            minimal_distance = distance;
+          }
+        }
+      }
+    }
+    print("closest metadata is "+closest_metaData+"\n");
+    print("closest metadata is within "+minimal_distance+" pixels\n");
+    return closest_metaData;
   }
+
+  //Ordinary straight-line distance
+  float euclidean_distance(MetaData md) {
+    float distance = sqrt(pow((this.p.x - md.x), 2) + pow((this.p.y - md.y), 2));
+    return distance;
+  }
+
+  /*Hey! Manhattan_distance is never the shortest distance,
+   so wy do we need it Paul ?
+   HA HA I'M GLAD YOU FUCKING ASK !
+   We need it fort three reasons !
+   Number one:    it sounds like american stuff so it has to be cool !
+   Number two:    it does not invole square root and other mathematician shit that
+   euclidean distance requires so it's far more quicker to calculate.
+   Number three:  I dot not really have a third reason but do I really need one ?
+   You should already be convinced that it is cool and useful isn't it ?
+   */
+  float manhattan_distance(MetaData md) {
+    float distance = abs(this.p.x - md.x) + abs(this.p.y - md.y);
+    return distance;
+  }
+
+
 
   /*
   void collide(ArrayList<Bloc> t) {//Trop de parcours

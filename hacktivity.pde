@@ -1,5 +1,5 @@
 import static javax.swing.JOptionPane.*;
-
+//import maths.*;
 Parser parser;
 Player p;
 Pluie pluie;
@@ -21,7 +21,7 @@ int height_world=0;
 final int ABS_SPAWN_PLAYER=960;
 final int ORD_SPAWN_PLAYER=540;
 
-final int NB_METADATA = 10000;//number of metada to generate
+final int NB_METADATA = 10;//number of metada to generate
 
 
 void setup() {
@@ -131,8 +131,9 @@ void draw() {
    text(p.p.x, 12,20);
    text(p.p.y, 12,40);
    text(tabMeta.size(), 12, 60);
-   
-
+   text(p.dir_to_closest_md(),12,80);
+   //text(abs(p.camX-p.p.x),12,100); show player abs on screen (!= on the map)
+   draw_direction();
   // barre en bas
   fill(255, 40);
   noStroke();
@@ -161,5 +162,23 @@ String printTabScore(){
     s+="\nCercle: "+tabScore[3];
     s+="\nTriangle: "+tabScore[4];
     return s;
+}
+
+void draw_direction(){
+  MetaData md = p.gps();
+  int x1 = int(p.p.x);
+  int y1 = int(p.p.y);
+
+  float x2 = md.x;
+  float y2 = md.y;
+
+  PVector direction = new PVector();
+  direction.x=x2-x1;
+  direction.y=y2-y1;
+  direction.normalize();
+  direction.mult(50);
+  translate(abs(x1-p.camX),abs(y1-p.camY));//Position du joueur à l'écran
+  line(0,0,direction.x,direction.y);
+
 }
     

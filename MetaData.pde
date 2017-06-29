@@ -33,7 +33,6 @@ void createRandomMetaData(int nbMetaData) {
         valide = !parser.tabBloc.get(i).inside(meta_abs, meta_ord, WIDTH_METADATA, HEIGHT_METADATA);//return false if md outside bloc
         if (valide==false) break;
       }
-
     } while (valide==false);
 
     tabMeta.add(new MetaData(metaShape[meta_shape], meta_abs, meta_ord, WIDTH_METADATA, HEIGHT_METADATA));
@@ -81,7 +80,7 @@ void initMetaData() {
 void drawMetaData() {
   for (int i=0; i<tabMeta.size(); i++) {
     tabMeta.get(i).draw();
-    tabMeta.get(i).insideAndKill(p.p.x, p.p.y);
+    tabMeta.get(i).insideAndKill(p.p.x, p.p.y);//Bof bof
   }
 
   for (int i=0; i<tabMeta.size(); i++) {
@@ -148,5 +147,10 @@ class MetaData {
     } else {
       return false;
     }
+  }
+
+  boolean inside(float min_x, float min_y, float max_x, float max_y) {
+    if (x>min_x && x<max_x && y>min_y && y <max_y) return true;
+    return false;
   }
 }
