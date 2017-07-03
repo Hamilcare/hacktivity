@@ -113,7 +113,7 @@ class Player {
   }
 
   String dir_to_closest_md() {
-    MetaData closest_md = this.gps();
+    MetaData closest_md = this.getClosestMetaData();
     String dir="";
     if (closest_md.y>this.p.y) dir+="S";
     else dir+="N";
@@ -125,27 +125,31 @@ class Player {
   float [] space={20, 20};
   float [] space2={5, 5};
 
-  void draw2() {
 
+  /*
+  void draw2() {
+    /*
     // ellipse autour de l'ellipse principale
-    /* noFill();
+     noFill();
      stroke(0,100);
      strokeWeight(0.6);    
-     ellipse(p.x, p.y, 120, 120); */
-    // lignes qui rattachent au centre de la fenêtre  
-    /* dashline(p.x, p.y,width/2,height/2,space);
+     ellipse(p.x, p.y, 120, 120);
+     // lignes qui rattachent au centre de la fenêtre
+     dashline(p.x, p.y,width/2,height/2,space);
      stroke(255,0,0,100);
      dashline(p.x, p.y,width/2,height,space2);
      stroke(0,0,255,150);
-     dashline(p.x, p.y,2000,height,space2); */
-  }
+     dashline(p.x, p.y,2000,height,space2);
 
+  }*/
+
+  /*
   void drawPost() {
     // contours pour la ligne du bas + ligne directrice au milieu de l'ellipse
     stroke(0);
     // ligne directrice au milieu de l'ellipse 
     //line(p.x, p.y, p.x+v.x*5, p.y+v.y*5);
-  }
+  }*/
 
   void collide(ArrayList<Bloc> t) {
     //Pas beacoup mieux qu'avant mais on n'a plus qu'une seule boucle
@@ -180,7 +184,7 @@ class Player {
   }
 
   /*Provide direction to the closest metadata */
-  MetaData gps() {
+  MetaData getClosestMetaData() {
     /*
      We assume that calculate the distance between meta data
      and player is by far the most expensive operation.
@@ -220,8 +224,8 @@ class Player {
         }
       }
     }
-    print("closest metadata is "+closest_metaData+"\n");
-    print("closest metadata is within "+minimal_distance+" pixels\n");
+    //print("closest metadata is "+closest_metaData+"\n");
+    //print("closest metadata is within "+minimal_distance+" pixels\n");
     return closest_metaData;
   }
 

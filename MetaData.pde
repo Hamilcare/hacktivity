@@ -33,6 +33,13 @@ void createRandomMetaData(int nbMetaData) {
         valide = !parser.tabBloc.get(i).inside(meta_abs, meta_ord, WIDTH_METADATA, HEIGHT_METADATA);//return false if md outside bloc
         if (valide==false) break;
       }
+
+      //On s'assure que les metadata ne se superposent pas
+      for (i=0; i < tabMeta.size(); i++) {
+        valide = !tabMeta.get(i).inside(meta_abs, meta_ord, WIDTH_METADATA, HEIGHT_METADATA);//return false if md outside md
+        if (valide==false) break;
+      }
+
     } while (valide==false);
 
     tabMeta.add(new MetaData(metaShape[meta_shape], meta_abs, meta_ord, WIDTH_METADATA, HEIGHT_METADATA));
@@ -153,4 +160,13 @@ class MetaData {
     if (x>min_x && x<max_x && y>min_y && y <max_y) return true;
     return false;
   }
+
+/*Cannot remember what was the purpose of that :S
+  boolean inside2(float mdx, float mdy, float mdw, float mdh){
+    if(mdx+mdw >= this.x && mdx <this.x+this.w && mdy+mdh > this.y && mdy < this.y + this.h){
+      return true;
+    } else{
+      return false;
+    }
+  }*/
 }
