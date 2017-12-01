@@ -240,7 +240,7 @@ class Player {
    HA HA I'M GLAD YOU FUCKING ASK !
    We need it fort three reasons !
    Number one:    it sounds like american stuff so it has to be cool !
-   Number two:    it does not invole square root and other mathematician shit that
+   Number two:    it does not involve square root and other mathematician shit that
    euclidean distance requires so it's far more quicker to calculate.
    Number three:  I dot not really have a third reason but do I really need one ?
    You should already be convinced that it is cool and useful isn't it ?

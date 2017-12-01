@@ -8,6 +8,49 @@ Table table;
 final int WIDTH_METADATA = 25;
 final int HEIGHT_METADATA = 25;
 
+
+
+void createMetaDataFromCookies(CookieReader cr){
+  metaShape[0]=loadShape("carre.svg");
+  metaShape[1]=loadShape("etoile.svg");
+  metaShape[2]=loadShape("polygone.svg");
+  metaShape[3]=loadShape("rond.svg");
+  metaShape[4]=loadShape("triangle.svg");
+
+  int compteurMetaDataValide = 0;
+  while (compteurMetaDataValide < cr.size()) {
+    int meta_shape = int(random(0, 5));
+    int meta_abs = 0;
+    int meta_ord = 0;
+    boolean valide = true;
+
+    do {
+      meta_abs = int(random(0, width_world));
+      meta_ord = int(random(0, height_world));
+
+      int i=0;
+      //On s'assure que la metaData n'est pas dans un bloc
+      for (i=0; i < parser.tabBloc.size(); i++) {
+        valide = !parser.tabBloc.get(i).inside(meta_abs, meta_ord, WIDTH_METADATA, HEIGHT_METADATA);//return false if md outside bloc
+        if (valide==false) break;
+      }
+
+      //On s'assure que les metadata ne se superposent pas
+      for (i=0; i < tabMeta.size(); i++) {
+        valide = !tabMeta.get(i).inside(meta_abs, meta_ord, WIDTH_METADATA, HEIGHT_METADATA);//return false if md do not overlay
+        if (valide==false) break;
+      }
+
+    } while (valide==false);
+
+    tabMeta.add(new MetaData(metaShape[meta_shape], meta_abs, meta_ord, WIDTH_METADATA, HEIGHT_METADATA, cr.next()));
+    compteurMetaDataValide++;
+  }
+}  
+  
+  
+
+
 //Generate meta data randomly
 void createRandomMetaData(int nbMetaData) {
   metaShape[0]=loadShape("carre.svg");
@@ -106,6 +149,7 @@ class MetaData {
   float h=0;
   boolean life=true;
   PShape shape;
+  String  label = "";//Nom de domaine auquel est rattaché le cookie
 
   MetaData(PShape _shape, float _x, float _y, float _w, float _h) {  
     x=_x;
@@ -113,6 +157,19 @@ class MetaData {
     w=_w;
     h=_h;
     shape=_shape;
+  }
+  
+  MetaData(PShape _shape, float _x, float _y, float _w, float _h, String _label) {  
+    x=_x;
+    y=_y;
+    w=_w;
+    h=_h;
+    shape=_shape;
+    label=_label;
+  }
+  
+  void setLabel(String s){
+    this.label =s;
   }
 
   void draw() {
@@ -144,6 +201,10 @@ class MetaData {
       }
       if (shape==metaShape[4]) {
         tabScore[4]++;
+      }
+      if(!label.isEmpty()){
+        listResidualMetaData.add(new ResidualMetaData(x, y, label));
+        
       }
     }
   }

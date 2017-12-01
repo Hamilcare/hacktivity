@@ -25,9 +25,15 @@ final int NB_METADATA = 10;//number of metada to generate
 
 final int time_limit=1200;
 
+//CookieReader
+SQLite dbFirefox = new SQLite(this,"/home/valentin/.mozilla/firefox/77x3h8j8.default/cookies.sqlite");
+
+//Remanant MetaData
+ArrayList<ResidualMetaData> listResidualMetaData = new ArrayList<ResidualMetaData>();
+
 void setup() {
-  fullScreen(P3D);
-  //size(600,600,P3D);
+  //fullScreen(P3D);
+  size(600,600,P3D);
   frameRate(60);
   old = loadImage("back.png");
   part = loadImage("particuleOP.png");
@@ -51,8 +57,10 @@ void setup() {
   hudA.clear();
   hudA.endDraw();
 
+  //METADATA
   //initMetaData();
-  createRandomMetaData(NB_METADATA);
+  //createRandomMetaData(NB_METADATA);
+  createMetaDataFromCookies(new FirefoxCookieReader(dbFirefox));
 }
 
 float ang=0;
@@ -95,6 +103,12 @@ void draw() {
   fires.draw();
 
   drawMetaData();
+  //Affiche les anciennes meta data
+  for(ResidualMetaData data : listResidualMetaData){
+    if(data.cpt>=0){
+     data.draw();
+    }
+  }
 
   camera();
 
@@ -142,6 +156,10 @@ void draw() {
   fill(255, 40);
   noStroke();
   //rect(20, height-40, map(p.energie, 60, 100, 0, 200), 20);
+  
+  
+  
+ 
 
   int elapsed_time = int((millis()-start_time)/1000);
   rect(20, height-40, map(elapsed_time, 0, time_limit, 0, width-20), 20);
@@ -152,6 +170,7 @@ void draw() {
       start_time=millis();
     } else {
       showMessageDialog(null, printTabScore(), "Score", PLAIN_MESSAGE);
+      exit();
     }
   }
 }
